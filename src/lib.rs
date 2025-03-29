@@ -18,30 +18,37 @@ pub enum Command {
     #[command(arg_required_else_help = true)]
     Start {
         #[arg(default_value = "25")]
-        duration: u64,
+        session_time_m: u64,
     },
 }
 
-pub struct SessionTimer {
-    time_left: Duration,
-    timer: Timer,
+pub enum TimerEvent {
+    Update(Duration),
+    Finish,
 }
 
-impl SessionTimer {
-    pub fn new(session_time: u64) -> Self {
+pub struct SessionTimer<'a> {
+    time_left: Duration,
+    timer: Timer,
+    on_event: Box<dyn Fn(TimerEvent) + 'a>,
+}
+
+impl<'a> SessionTimer<'a> {
+    pub fn new(session_time_m: u64, on_event: impl Fn(TimerEvent) + 'a) -> Self {
         SessionTimer {
-            time_left: Duration::from_secs(session_time * 60),
+            time_left: Duration::from_secs(session_time_m * 60),
             timer: Timer::interval(Duration::from_secs(1)),
+            on_event: Box::new(on_event),
         }
     }
 
     pub async fn start(&mut self) {
         while (self.timer.next().await).is_some() {
-            println!("Timer fired!");
             self.time_left -= Duration::from_secs(1);
-            println!("Time left: {:?}", self.time_left);
+            (self.on_event)(TimerEvent::Update(self.time_left));
+
             if self.time_left == Duration::ZERO {
-                println!("Session completed!");
+                (self.on_event)(TimerEvent::Finish);
                 break;
             }
         }
