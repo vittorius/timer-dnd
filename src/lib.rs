@@ -5,7 +5,6 @@ use smol::stream::StreamExt;
 use smol::Timer;
 
 #[derive(Debug, Parser)]
-#[command(name = "mindful-timer")]
 #[command(about = "A timer for distraction-free work", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
@@ -17,8 +16,8 @@ pub enum Command {
     /// Start a timer for a given duration
     #[command(arg_required_else_help = true)]
     Start {
-        #[arg(default_value = "25")]
-        session_time_m: u64,
+        #[arg(default_value = "25", help = "Session time in minutes")]
+        session_time: u64,
     },
 }
 
