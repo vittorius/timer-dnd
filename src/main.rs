@@ -2,8 +2,8 @@ use clap::Parser;
 use helpers::clear_line_and_write;
 use helpers::DurationExt;
 use macro_rules_attribute::apply;
-use mindful_timer_rs::{Cli, Command, SessionTimer, TimerEvent};
 use smol_macros::main;
+use timer_dnd::{Cli, Command, SessionTimer, TimerEvent};
 
 mod helpers;
 

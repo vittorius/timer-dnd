@@ -5,7 +5,6 @@ use smol::stream::StreamExt;
 use smol::Timer;
 
 #[derive(Debug, Parser)]
-#[command(name = "mindful-timer")]
 #[command(about = "A timer for distraction-free work", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
