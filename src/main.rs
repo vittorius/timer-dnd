@@ -12,8 +12,8 @@ async fn main() {
     let args = Cli::parse();
 
     match args.command {
-        Command::Start { session_time_m } => {
-            let mut timer = SessionTimer::new(session_time_m, |event| match event {
+        Command::Start { session_time } => {
+            let mut timer = SessionTimer::new(session_time, |event| match event {
                 TimerEvent::Update(time_left) => {
                     clear_line_and_write(&format!(
                         "🕐 {:02}:{:02}:{:02}",
@@ -27,10 +27,10 @@ async fn main() {
 
             println!(
                 "Starting timer for{} {}m",
-                Some(session_time_m / 60)
+                Some(session_time / 60)
                     .filter(|&x| x != 0)
                     .map_or("".to_owned(), |x| format!(" {}h", x)),
-                session_time_m % 60,
+                session_time % 60,
             );
 
             timer.start().await;
