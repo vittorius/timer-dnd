@@ -1,6 +1,7 @@
 use clap::Parser;
 use helpers::clear_line_and_write;
 use helpers::DurationExt;
+use macos_focus_mode::FocusMode;
 use macro_rules_attribute::apply;
 use smol_macros::main;
 use timer_dnd::{Cli, Command, SessionTimer, TimerEvent};
@@ -35,5 +36,9 @@ async fn main() {
 
             timer.start().await;
         }
+        Command::Install => match FocusMode::install_shortcut() {
+            Ok(_) => println!("Shortcut installed successfully"),
+            Err(e) => eprintln!("Failed to install shortcut: {}", e),
+        },
     }
 }

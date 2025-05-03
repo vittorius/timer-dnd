@@ -19,6 +19,8 @@ pub enum Command {
         #[arg(default_value = "25", help = "Session time in minutes")]
         session_time: u64,
     },
+    /// Install a macOS shortcut for DnD focus mode
+    Install,
 }
 
 pub enum TimerEvent {
